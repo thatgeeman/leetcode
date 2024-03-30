@@ -34,8 +34,6 @@ n == height.length
 
 #include <vector>
 #include <iostream>
-#include <numeric>
-#include <map>
 using namespace std;
 
 class Solution
@@ -47,28 +45,29 @@ public:
 
         int n = height.size();
         int max_area = 0;
-        for (int j = 0; j < n; j++)
+        int left = 0;
+        int right = n - 1;
+
+        while (left < right)
         {
-            int p_ha = height[j];
-            for (int i = n - 1; i > j; i--)
+            int width = abs(left - right);
+            int h_left = height[left];
+            int h_right = height[right];
+            // cout << "left: " << left << " right: " << right << " width: " << width << " h_left: " << h_left << " h_right: " << h_right << endl;
+            int area = h_right < h_left ? h_right * width : h_left * width; // take the smaller height
+            // cout << " area: " << area << endl;
+            max_area = max(area, max_area);
+            // cout << " max_area: " << max_area << endl;
+            if (h_right > h_left)
             {
-                int p_hb = height[i];
-                cout << p_ha << "@" << j << " " << p_hb << "@" << i;
-                if (p_ha == p_hb)
-                {
-                    max_area = max(p_hb * abs(i - j), max_area);
-                }
-                else if (p_ha > p_hb)
-                {
-                    max_area = max(p_hb * abs(i - j), max_area);
-                }
-                else if (p_hb > p_ha)
-                {
-                    max_area = max(p_ha * abs(i - j), max_area);
-                }
-                cout << " max_area: " << max_area << endl;
+                left += 1;
+            }
+            else
+            {
+                right -= 1;
             }
         }
+
         return max_area;
     }
 
